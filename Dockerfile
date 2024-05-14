@@ -1,6 +1,5 @@
 ARG BASE_IMAGE_VERSION
-ARG BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base:${BASE_IMAGE_VERSION}
-FROM $BUILD_FROM
+FROM ghcr.io/hassio-addons/ubuntu-base:${BASE_IMAGE_VERSION}
 
 ARG NVM_VERSION
 ARG NODE_VERSION

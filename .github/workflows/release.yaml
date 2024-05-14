@@ -50,7 +50,7 @@ jobs:
           context: .
           file: ./Dockerfile
           build-args: |
-            BUILD_FROM=${{ env.BASE_IMAGE_VERSION }}
+            BASE_IMAGE_VERSION=${{ env.BASE_IMAGE_VERSION }}
             NVM_VERSION=${{ env.NVM_VERSION }}
             NODE_VERSION=${{ env.NODE_VERSION }}
             MONGODB_VERSION=${{ env.MONGODB_VERSION }}
