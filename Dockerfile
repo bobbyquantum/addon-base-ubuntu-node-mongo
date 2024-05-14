@@ -6,7 +6,7 @@ ARG NVM_VERSION
 ARG NODE_VERSION
 ARG MONGODB_VERSION
 
-# Install Git, MongoDB, NVM, Node.js, clean up in a single RUN to reduce layers
+# Install Git, MongoDB, NVM, Node.js, clean up 
 RUN apt-get update && apt-get install -y gnupg git && \
     ## install mongo (signed check)
     curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGODB_VERSION}.asc | \
