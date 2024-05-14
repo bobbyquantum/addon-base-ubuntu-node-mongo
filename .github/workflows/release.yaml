@@ -47,7 +47,7 @@ jobs:
           docker push ghcr.io/bobbyquantum/addon-base-ubuntu-node-mongo:${IMAGE_TAG}
 
       - name: Clean up post build/test
-        run: docker rmi addon-base-ubuntu-node-mongo:$IMAGE_TAG
+        run: docker rmi ghcr.io/bobbyquantum/addon-base-ubuntu-node-mongo:$IMAGE_TAG
 
       - name: Complete
         run: echo "Build and push completed on $(date)"
