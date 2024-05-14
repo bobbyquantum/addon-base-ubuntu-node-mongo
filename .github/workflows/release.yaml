@@ -16,19 +16,17 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Read config
-        id: read-config
-        uses: jaspernbrouwer/powershell-yaml@1.3
-        with:
-          path: 'config.yaml'
+      - name: Install yq
+        run: sudo snap install yq
 
-      - name: Set environment variables
+      - name: Read config
+        id: config
         run: |
-          echo "BASE_IMAGE_VERSION=${{ steps.read-config.outputs.base_image_version }}" >> $GITHUB_ENV
-          echo "NVM_VERSION=${{ steps.read-config.outputs.nvm_version }}" >> $GITHUB_ENV
-          echo "NODE_VERSION=${{ steps.read-config.outputs.node_version }}" >> $GITHUB_ENV
-          echo "MONGODB_VERSION=${{ steps.read-config.outputs.mongodb_version }}" >> $GITHUB_ENV
-          echo "IMAGE_TAG=${{ steps.read-config.outputs.tag_version }}" >> $GITHUB_ENV
+          echo "BASE_IMAGE_VERSION=$(yq e '.base_image_version' config.yaml)" >> $GITHUB_ENV
+          echo "NVM_VERSION=$(yq e '.nvm_version' config.yaml)" >> $GITHUB_ENV
+          echo "NODE_VERSION=$(yq e '.node_version' config.yaml)" >> $GITHUB_ENV
+          echo "MONGODB_VERSION=$(yq e '.mongodb_version' config.yaml)" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$(yq e '.tag_version' config.yaml)" >> $GITHUB_ENV
 
       - name: Build the Docker image
         run: |
