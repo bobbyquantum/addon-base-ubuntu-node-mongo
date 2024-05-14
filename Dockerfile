@@ -8,7 +8,6 @@ ARG MONGODB_VERSION
 
 # Install Git, MongoDB, NVM, Node.js, clean up 
 RUN apt-get update && apt-get install -y gnupg git && \
-    ## install mongo (signed check)
     curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGODB_VERSION}.asc | \
     gpg --dearmor -o /usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg && \
     echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg ] \
