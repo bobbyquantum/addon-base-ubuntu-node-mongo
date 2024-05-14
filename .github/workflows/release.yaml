@@ -41,7 +41,7 @@ jobs:
 
       - name: Push the Docker image to GitHub Packages
         run: |
-          docker push ghcr.io/bobbyquantum/addon-base-ubuntu-node-mongo/addon-base-ubuntu-node-mongo:${IMAGE_TAG}
+          docker push ghcr.io/bobbyquantum/addon-base-ubuntu-node-mongo:${IMAGE_TAG}
 
       - name: Clean up post build/test
         run: docker rmi my-image-name:$IMAGE_TAG

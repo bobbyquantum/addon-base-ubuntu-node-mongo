@@ -1,5 +1,4 @@
 # update this file to trigger release
-
 tag_version: "1.0.0"
 base_image_version: "ghcr.io/hassio-addons/ubuntu-base:10.0.0"
 nvm_version: "v0.39.1"
