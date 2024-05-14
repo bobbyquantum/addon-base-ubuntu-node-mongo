@@ -7,18 +7,18 @@ ARG NODE_VERSION
 ARG MONGODB_VERSION
 
 # Install MongoDB, NVM, Node.js, clean up in a single RUN to reduce layers
-RUN apt-get update && \
-    apt-get install -y gnupg curl ca-certificates && \
-    curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGODB_VERSION}.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg && \
-    echo "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/${MONGODB_VERSION} multiverse" > /etc/apt/sources.list.d/mongodb-org-${MONGODB_VERSION}.list && \
-    apt-get install -y mongodb-org && \
+RUN apt-get update && apt-get install -y gnupg git && \
+    ## install mongo (signed check)
+    curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGODB_VERSION}.asc | \
+    gpg --dearmor -o /usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg && \
+    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-${MONGODB_VERSION}.gpg ] \
+    https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/${MONGODB_VERSION} multiverse" | \
+    tee /etc/apt/sources.list.d/mongodb-org-${MONGODB_VERSION}.list && \
+    apt-get update && apt-get install -y mongodb-org-server && \
+    echo "mongodb-org-server hold" | dpkg --set-selections && \
+    # install nvm and node
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash && \
-    export NVM_DIR="$HOME/.nvm" && \
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
-    nvm install ${NODE_VERSION} && \
-    nvm use ${NODE_VERSION} && \
-    nvm alias default ${NODE_VERSION} && \
-    apt-get purge -y gnupg curl && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    echo "source $HOME/.nvm/nvm.sh" >> $HOME/.bashrc && \
+    /bin/bash -c "source $HOME/.nvm/nvm.sh; nvm install ${NODE_VERSION}" && \
+    apt-get purge -y gnupg && apt-get autoremove -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
