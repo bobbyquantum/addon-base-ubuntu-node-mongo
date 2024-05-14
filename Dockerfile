@@ -21,4 +21,4 @@ RUN apt-get update && apt-get install -y gnupg git && \
     echo "source $HOME/.nvm/nvm.sh" >> $HOME/.bashrc && \
     /bin/bash -c "source $HOME/.nvm/nvm.sh; nvm install ${NODE_VERSION}" && \
     apt-get purge -y gnupg && apt-get autoremove -y && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* 
