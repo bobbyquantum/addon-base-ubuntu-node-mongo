@@ -1,5 +1,5 @@
-# Use the specified Home Assistant addon base image
-ARG BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base:10.0.0
+ARG BASE_IMAGE_VERSION
+ARG BUILD_FROM=ghcr.io/hassio-addons/ubuntu-base:${BASE_IMAGE_VERSION}
 FROM $BUILD_FROM
 
 ARG NVM_VERSION
