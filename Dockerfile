@@ -7,7 +7,6 @@ ARG MONGODB_VERSION
 
 # Install Git, MongoDB, NVM, Node.js, clean up 
 RUN apt-get update && apt-get install -y gnupg git && \
-    # install node
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     curl -fsSL https://www.mongodb.org/static/pgp/server-${MONGODB_VERSION}.asc | \
