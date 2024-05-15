@@ -11,6 +11,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: ["aarch64", "amd64"]
     permissions:
       contents: read
       packages: write
@@ -49,6 +52,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          platforms: ${{ matrix.arch }}
           build-args: |
             BUILD_FROM=${{ env.BUILD_FROM }}
             NVM_VERSION=${{ env.NVM_VERSION }}
