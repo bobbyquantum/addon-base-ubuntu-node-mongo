@@ -75,8 +75,5 @@ jobs:
           cache-to:
             type=local,dest=/tmp/.docker-cache,mode=max
 
-      - name: Clean up Docker Buildx
-        run: docker buildx rm builder
-
       - name: Complete
         run: echo "Build and push completed on $(date)"
