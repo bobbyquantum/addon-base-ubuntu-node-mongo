@@ -52,8 +52,6 @@ jobs:
       - name: Compose build flags
         id: flags
         run: |
-          from=$(yq e ".build_from.${{ matrix.architecture }}" config.yaml)
-          echo "BUILD_FROM=${from}" >> "$GITHUB_ENV"
           case "${{ matrix.architecture }}" in
             "linux/amd64") echo "platform=linux/amd64" ;;
             "linux/arm64") echo "platform=linux/arm64/v8" ;;
