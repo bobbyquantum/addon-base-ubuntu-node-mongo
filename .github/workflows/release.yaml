@@ -52,7 +52,7 @@ jobs:
       - name: Compose build flags
         id: flags
         run: |
-          case "${{ matrix.architecture }}" in
+          case "${{ matrix.arch }}" in
             "linux/amd64") echo "platform=linux/amd64" ;;
             "linux/arm64") echo "platform=linux/arm64/v8" ;;
             *) echo "::error ::Could not determine platform for architecture ${{ matrix.architecture }}" && exit 1 ;;
