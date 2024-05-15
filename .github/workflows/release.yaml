@@ -55,7 +55,6 @@ jobs:
           platforms: ${{ matrix.arch }}
           build-args: |
             BUILD_FROM=${{ env.BUILD_FROM }}
-            NVM_VERSION=${{ env.NVM_VERSION }}
             NODE_VERSION=${{ env.NODE_VERSION }}
             MONGODB_VERSION=${{ env.MONGODB_VERSION }}
           tags: ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/addon-base-ubuntu-node-mongo:${{ env.IMAGE_TAG }}
@@ -63,13 +62,12 @@ jobs:
 
       - name: Clean up Docker Buildx
         uses: docker/build-push-action@v2
-        platforms: ${{ matrix.arch }}
-        build-args: |
-          BUILD_FROM=${{ env.BUILD_FROM }}
-          NVM_VERSION=${{ env.NVM_VERSION }}
-          NODE_VERSION=${{ env.NODE_VERSION }}
-          MONGODB_VERSION=${{ env.MONGODB_VERSION }}
         with:
+          platforms: ${{ matrix.arch }}
+          build-args: |
+            BUILD_FROM=${{ env.BUILD_FROM }}
+            NODE_VERSION=${{ env.NODE_VERSION }}
+            MONGODB_VERSION=${{ env.MONGODB_VERSION }}
           cleanup: true
 
       - name: Complete

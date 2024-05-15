@@ -1,11 +1,10 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-ARG NVM_VERSION
 ARG NODE_VERSION
 ARG MONGODB_VERSION
 
-# Install Git, MongoDB, NVM, Node.js, clean up 
+# Install Git, MongoDB, Node.js, clean up 
 RUN apt-get update && apt-get install -y gnupg git && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
