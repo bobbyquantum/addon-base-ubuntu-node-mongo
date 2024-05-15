@@ -34,10 +34,10 @@ jobs:
           echo "IMAGE_TAG=$(yq e '.tag_version' config.yaml)" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -48,7 +48,7 @@ jobs:
         run: echo "REPOSITORY_OWNER_LOWER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
         
       - name: Build and Push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
@@ -59,16 +59,6 @@ jobs:
             MONGODB_VERSION=${{ env.MONGODB_VERSION }}
           tags: ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/addon-base-ubuntu-node-mongo:${{ env.IMAGE_TAG }}
           push: true
-
-      - name: Clean up Docker Buildx
-        uses: docker/build-push-action@v2
-        with:
-          platforms: ${{ matrix.arch }}
-          build-args: |
-            BUILD_FROM=${{ env.BUILD_FROM }}
-            NODE_VERSION=${{ env.NODE_VERSION }}
-            MONGODB_VERSION=${{ env.MONGODB_VERSION }}
-          cleanup: true
 
       - name: Complete
         run: echo "Build and push completed on $(date)"
