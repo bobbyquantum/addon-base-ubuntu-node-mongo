@@ -32,6 +32,8 @@ jobs:
           echo "NODE_VERSION=$(yq e '.node_version' config.yaml)" >> $GITHUB_ENV
           echo "MONGODB_VERSION=$(yq e '.mongodb_version' config.yaml)" >> $GITHUB_ENV
           echo "IMAGE_TAG=$(yq e '.tag_version' config.yaml)" >> $GITHUB_ENV
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -46,19 +48,39 @@ jobs:
       - name: Lowercase username
         id: lowercase
         run: echo "REPOSITORY_OWNER_LOWER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-        
+
+      - name: Compose build flags
+        id: flags
+        run: |
+          echo "date=$(date +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_ENV"
+          from=$(yq e ".build_from.${{ matrix.architecture }}" config.yaml)
+          echo "BUILD_FROM=${from}" >> "$GITHUB_ENV"
+
+          case "${{ matrix.architecture }}" in
+            "linux/amd64") echo "platform=linux/amd64" ;;
+            "linux/arm64") echo "platform=linux/arm64/v8" ;;
+            *) echo "::error ::Could not determine platform for architecture ${{ matrix.architecture }}" && exit 1 ;;
+          esac >> "$GITHUB_ENV"
+  
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
-          platforms: ${{ matrix.arch }}
+          platforms:  ${{ env.platform }}
           build-args: |
             BUILD_FROM=${{ env.BUILD_FROM }}
             NODE_VERSION=${{ env.NODE_VERSION }}
             MONGODB_VERSION=${{ env.MONGODB_VERSION }}
           tags: ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/addon-base-ubuntu-node-mongo:${{ env.IMAGE_TAG }}
           push: true
+          cache-from: |
+            type=local,src=/tmp/.docker-cache 
+          cache-to:
+            type=local,dest=/tmp/.docker-cache,mode=max
 
+      - name: Clean up Docker Buildx
+        run: docker buildx rm builder
+        
       - name: Complete
         run: echo "Build and push completed on $(date)"
