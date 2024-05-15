@@ -4,7 +4,7 @@ FROM $BUILD_FROM
 ARG NVM_VERSION
 ARG NODE_VERSION
 ARG MONGODB_VERSION
-ENV XDG_CONFIG_HOME=/opt/nvm
+
 # Install Git, MongoDB, NVM, Node.js, clean up 
 RUN apt-get update && apt-get install -y gnupg git && \
     # install node
